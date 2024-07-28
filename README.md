@@ -233,7 +233,3 @@ http://localhost:8893/api/search?query=Who won the 2022 FIFA world cup&k=25
 * [`cpu_inference`](https://github.com/stanford-futuredata/ColBERT/tree/cpu_inference): ColBERTv2 implementation with CPU search support.
 * [`fast_search`](https://github.com/stanford-futuredata/ColBERT/tree/fast_search): ColBERTv2 implementation with PLAID.
 * [`binarization`](https://github.com/stanford-futuredata/ColBERT/tree/binarization): ColBERT with a baseline binarization-based compression strategy (as opposed to ColBERTv2's residual compression, which we found to be more robust).
-
-## Acknowledgments
-
-ColBERT logo designed by Chuyi Zhang.
