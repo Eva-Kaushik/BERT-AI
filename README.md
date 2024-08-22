@@ -1,25 +1,15 @@
-<p align="center">
-  <img align="center" src="docs/images/colbertofficial.png" width="430px" />
-</p>
-<p align="left">
 
-# ColBERT (v2)
+# BERT-AI (v2)
 
-### ColBERT is a _fast_ and _accurate_ retrieval model, enabling scalable BERT-based search over large text collections in tens of milliseconds.
-
-[<img align="center" src="https://colab.research.google.com/assets/colab-badge.svg" />](https://colab.research.google.com/github/stanford-futuredata/ColBERT/blob/main/docs/intro2new.ipynb)
-
+### BERT-AI is a _fast_ and _accurate_ retrieval model, enabling scalable BERT-based search over large text collections in tens of milliseconds.
 
 <p align="center">
-  <img align="center" src="docs/images/ColBERT-Framework-MaxSim-W370px.png" />
-</p>
-<p align="center">
-  <b>Figure 1:</b> ColBERT's late interaction, efficiently scoring the fine-grained similarity between a queries and a passage.
+  <b>Figure 1:</b> late interaction, efficiently scoring the fine-grained similarity between a queries and a passage.
 </p>
 
 As Figure 1 illustrates, ColBERT relies on fine-grained **contextual late interaction**: it encodes each passage into a **matrix** of token-level embeddings (shown above in blue). Then at search time, it embeds every query into another matrix (shown in green) and efficiently finds passages that contextually match the query using scalable vector-similarity (`MaxSim`) operators.
 
-These rich interactions allow ColBERT to surpass the quality of _single-vector_ representation models, while scaling efficiently to large corpora. You can read more in our papers:
+These rich interactions allow to surpass the quality of _single-vector_ representation models, while scaling efficiently to large corpora. You can read more in our papers:
 
 * [**ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT**](https://arxiv.org/abs/2004.12832) (SIGIR'20).
 * [**Relevance-guided Supervision for OpenQA with ColBERT**](https://arxiv.org/abs/2007.00814) (TACL'21).
@@ -33,15 +23,12 @@ These rich interactions allow ColBERT to surpass the quality of _single-vector_ 
 
 ## 🚨 **Announcements** 
 
-* (1/28/24) One of the easiest ways to use ColBERT in applications nowadays is the semi-official, fast-growing [RAGatouille](https://github.com/bclavie/ragatouille) library.
+* (1/28/24) One of the easiest ways to use in applications nowadays is the semi-official, fast-growing [RAGatouille](https://github.com/bclavie/ragatouille) library.
 * (1/29/23) We have merged a new index updater feature and support for additional Hugging Face models! These are in beta so please give us feedback as you try them out.
 * (1/24/23) If you're looking for the **DSPy** framework for composing retrievers like ColBERTv2 and LLMs, it's at: https://github.com/stanfordnlp/dspy
 
 ----
 
-## ColBERTv1
-
-The ColBERTv1 code from the SIGIR'20 paper is in the [`colbertv1` branch](https://github.com/stanford-futuredata/ColBERT/tree/colbertv1). See [here](#branches) for more information on other branches.
 
 
 ## Installation
@@ -58,33 +45,6 @@ We have also included a new environment file specifically for CPU-only environme
 conda env create -f conda_env[_cpu].yml
 conda activate colbert
 ```
-
-If you face any problems, please [open a new issue](https://github.com/stanford-futuredata/ColBERT/issues) and we'll help you promptly!
-
-
-
-## Overview
-
-Using ColBERT on a dataset typically involves the following steps.
-
-**Step 0: Preprocess your collection.** At its simplest, ColBERT works with tab-separated (TSV) files: a file (e.g., `collection.tsv`) will contain all passages and another (e.g., `queries.tsv`) will contain a set of queries for searching the collection.
-
-**Step 1: Download the [pre-trained ColBERTv2 checkpoint](https://downloads.cs.stanford.edu/nlp/data/colbert/colbertv2/colbertv2.0.tar.gz).** This checkpoint has been trained on the MS MARCO Passage Ranking task. You can also _optionally_ [train your own ColBERT model](#training).
-
-**Step 2: Index your collection.** Once you have a trained ColBERT model, you need to [index your collection](#indexing) to permit fast retrieval. This step encodes all passages into matrices, stores them on disk, and builds data structures for efficient search.
-
-**Step 3: Search the collection with your queries.** Given the model and index, you can [issue queries over the collection](#retrieval) to retrieve the top-k passages for each query.
-
-Below, we illustrate these steps via an example run on the MS MARCO Passage Ranking task.
-
-
-## API Usage Notebook
-
-**NEW**: We have an experimental notebook on [Google Colab](https://colab.research.google.com/github/stanford-futuredata/ColBERT/blob/main/docs/intro2new.ipynb) that you can use with free GPUs. Indexing 10,000 on the free Colab T4 GPU takes six minutes.
-
-This Jupyter notebook **[docs/intro.ipynb notebook](docs/intro.ipynb)** illustrates using the key features of ColBERT with the new Python API.
-
-It includes how to download the ColBERTv2 model checkpoint trained on MS MARCO Passage Ranking and how to download our new LoTTE benchmark.
 
 
 ## Data
@@ -149,11 +109,6 @@ We can evaluate the MSMARCO rankings using the following command:
 ```
 python -m utility.evaluate.msmarco_passages --ranking "/path/to/msmarco.nbits=2.ranking.tsv" --qrels "/path/to/MSMARCO/qrels.dev.small.tsv"
 ```
-
-## Basic Training (ColBERTv1-style)
-
-We provide a [pre-trained model checkpoint](https://downloads.cs.stanford.edu/nlp/data/colbert/colbertv2/colbertv2.0.tar.gz), but we also detail how to train from scratch here.
-Note that this example demonstrates the ColBERTv1 style of training, but the provided checkpoint was trained with ColBERTv2.
 
 Training requires a JSONL triples file with a `[qid, pid+, pid-]` list per line. The query IDs and passage IDs correspond to the specified `queries.tsv` and `collection.tsv` files respectively.
 
@@ -220,16 +175,3 @@ A sample query:
 ```
 http://localhost:8893/api/search?query=Who won the 2022 FIFA world cup&k=25
 ```
-
-## Branches
-
-### Supported branches
-
-* [`main`](https://github.com/stanford-futuredata/ColBERT/tree/main): Stable branch with ColBERTv2 + PLAID.
-* [`colbertv1`](https://github.com/stanford-futuredata/ColBERT/tree/colbertv1): Legacy branch for ColBERTv1.
-
-### Deprecated branches
-* [`new_api`](https://github.com/stanford-futuredata/ColBERT/tree/new_api): Base ColBERTv2 implementation.
-* [`cpu_inference`](https://github.com/stanford-futuredata/ColBERT/tree/cpu_inference): ColBERTv2 implementation with CPU search support.
-* [`fast_search`](https://github.com/stanford-futuredata/ColBERT/tree/fast_search): ColBERTv2 implementation with PLAID.
-* [`binarization`](https://github.com/stanford-futuredata/ColBERT/tree/binarization): ColBERT with a baseline binarization-based compression strategy (as opposed to ColBERTv2's residual compression, which we found to be more robust).
